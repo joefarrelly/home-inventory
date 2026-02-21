@@ -203,6 +203,52 @@ app.post('/api/settings', (req, res) => {
   res.json({ success: true });
 });
 
+// Export full backup as JSON
+app.get('/api/export-backup', (req, res) => {
+  const backup = {
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    inventory: readData('inventory', []),
+    purchases: readData('purchases', []),
+    settings: readData('settings', null),
+    chores: readData('chores', []),
+    choreHistory: readData('chore-history', []),
+  };
+  const date = new Date().toISOString().split('T')[0];
+  res.setHeader('Content-Type', 'application/json');
+  res.setHeader('Content-Disposition', `attachment; filename="home-inventory-backup-${date}.json"`);
+  res.send(JSON.stringify(backup, null, 2));
+});
+
+// Export inventory as CSV
+app.get('/api/export-csv', (req, res) => {
+  const items = readData('inventory', []);
+  const settings = readData('settings', null);
+  const unitTypes = settings?.unitTypes || [];
+
+  const escapeCsv = (val) => {
+    if (typeof val !== 'string') return String(val);
+    if (val.includes(',') || val.includes('"') || val.includes('\n')) {
+      return `"${val.replace(/"/g, '""')}"`;
+    }
+    return val;
+  };
+
+  const header = 'Name,Quantity,Unit';
+  const sorted = [...items].sort((a, b) => a.quantity - b.quantity || a.name.localeCompare(b.name));
+  const rows = sorted.map(item => {
+    const unitType = unitTypes.find(u => u.id === item.unit);
+    const unitName = unitType ? (item.quantity === 1 ? unitType.singular : unitType.plural) : (item.unit || '');
+    return `${escapeCsv(item.name)},${item.quantity},${escapeCsv(unitName)}`;
+  });
+  const csv = [header, ...rows].join('\n');
+
+  const date = new Date().toISOString().split('T')[0];
+  res.setHeader('Content-Type', 'text/csv');
+  res.setHeader('Content-Disposition', `attachment; filename="inventory-${date}.csv"`);
+  res.send(csv);
+});
+
 // Serve APK download
 app.get('/download/app.apk', (req, res) => {
   const apkPath = join(DATA_DIR, 'app.apk');

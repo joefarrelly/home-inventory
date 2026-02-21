@@ -244,28 +244,7 @@ const Index = () => {
   };
 
   const handleExportCsv = () => {
-    const header = 'Name,Quantity,Unit';
-    const sorted = [...filteredItems].sort((a, b) => a.quantity - b.quantity || a.name.localeCompare(b.name));
-    const rows = sorted.map(item => {
-      const unitType = unitTypes.find(u => u.id === item.unit);
-      const unitName = unitType ? (item.quantity === 1 ? unitType.singular : unitType.plural) : item.unit;
-      const escapeCsv = (val: string) => {
-        if (val.includes(',') || val.includes('"') || val.includes('\n')) {
-          return `"${val.replace(/"/g, '""')}"`;
-        }
-        return val;
-      };
-      return `${escapeCsv(item.name)},${item.quantity},${escapeCsv(unitName)}`;
-    });
-    const csv = [header, ...rows].join('\n');
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const date = new Date().toISOString().split('T')[0];
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `inventory-${date}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
+    window.open('/api/export-csv', '_blank');
   };
 
   return (
@@ -526,11 +505,8 @@ const Index = () => {
                 displayQuantity={getDisplayQuantity(item)}
                 selectedFilter={selectedFilter}
                 onShowInfo={() => setInfoItem(item)}
-                onEdit={() => openEditDialog(item)}
-                onDelete={() => setDeletingItem(item)}
                 onAddStock={() => setAddStockItem(item)}
                 onRemoveStock={() => setRemoveStockItem(item)}
-                onMoveLocation={() => setMoveLocationItem(item)}
               />
             ))
           )}
@@ -606,6 +582,18 @@ const Index = () => {
           onMoveLocation={() => {
             if (infoItem) {
               setMoveLocationItem(infoItem);
+              setInfoItem(null);
+            }
+          }}
+          onEdit={() => {
+            if (infoItem) {
+              openEditDialog(infoItem);
+              setInfoItem(null);
+            }
+          }}
+          onDelete={() => {
+            if (infoItem) {
+              setDeletingItem(infoItem);
               setInfoItem(null);
             }
           }}

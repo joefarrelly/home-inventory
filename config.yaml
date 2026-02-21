@@ -1,6 +1,6 @@
 name: "Home Inventory Tracker"
 description: "Track household inventory, stock levels, and purchase history"
-version: "1.0.4"
+version: "1.0.0"
 slug: "home-inventory"
 init: false
 arch:

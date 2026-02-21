@@ -3,7 +3,7 @@ import { InventoryItem, getUnassignedQuantity } from '@/types/inventory';
 import { Category } from '@/types/inventory';
 import { UnitType, Location, Shop } from '@/hooks/useSettings';
 import { PurchaseLog } from '@/types/purchaseLog';
-import { TrendingDown, MapPin } from 'lucide-react';
+import { TrendingDown, MapPin, Pencil, Trash2 } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -23,6 +23,8 @@ interface ItemInfoDialogProps {
   purchases: PurchaseLog[];
   shops: Shop[];
   onMoveLocation?: () => void;
+  onEdit?: () => void;
+  onDelete?: () => void;
 }
 
 export function ItemInfoDialog({
@@ -35,6 +37,8 @@ export function ItemInfoDialog({
   purchases,
   shops,
   onMoveLocation,
+  onEdit,
+  onDelete,
 }: ItemInfoDialogProps) {
   if (!item) return null;
 
@@ -195,6 +199,24 @@ export function ItemInfoDialog({
               <span>{category?.name || 'Uncategorized'}</span>
             </div>
           </div>
+
+          {/* Edit / Delete */}
+          {(onEdit || onDelete) && (
+            <div className="flex gap-2 pt-2 border-t">
+              {onEdit && (
+                <Button variant="outline" className="flex-1" onClick={onEdit}>
+                  <Pencil className="w-4 h-4 mr-2" />
+                  Edit
+                </Button>
+              )}
+              {onDelete && (
+                <Button variant="outline" className="flex-1 text-destructive hover:text-destructive" onClick={onDelete}>
+                  <Trash2 className="w-4 h-4 mr-2" />
+                  Delete
+                </Button>
+              )}
+            </div>
+          )}
         </div>
       </DialogContent>
     </Dialog>

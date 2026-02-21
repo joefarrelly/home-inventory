@@ -1,7 +1,6 @@
-import { Minus, Plus, Pencil, Trash2 } from 'lucide-react';
+import { Minus, Plus } from 'lucide-react';
 import { InventoryItem, Category } from '@/types/inventory';
 import { UnitType, Location } from '@/hooks/useSettings';
-import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 interface InventoryItemCardProps {
@@ -12,22 +11,16 @@ interface InventoryItemCardProps {
   displayQuantity: number;
   selectedFilter: string | null;
   onShowInfo: () => void;
-  onEdit: () => void;
-  onDelete: () => void;
   onAddStock: () => void;
   onRemoveStock: () => void;
-  onMoveLocation: () => void;
 }
 
 export function InventoryItemCard({
   item,
   categories,
-  unitTypes,
   displayQuantity,
   selectedFilter,
   onShowInfo,
-  onEdit,
-  onDelete,
   onAddStock,
   onRemoveStock,
 }: InventoryItemCardProps) {
@@ -41,65 +34,43 @@ export function InventoryItemCard({
         isOutOfStock && "border-destructive/50 opacity-60"
       )}
     >
-      <div className="flex items-center gap-3">
-        {/* Item info - tappable area */}
+      {/* Top row: item name + category */}
+      <button
+        onClick={onShowInfo}
+        className="w-full text-left mb-2"
+      >
+        <h3 className="font-medium text-base">{item.name}</h3>
+        <p className="text-xs text-muted-foreground">
+          {category?.name || 'Uncategorized'}
+        </p>
+      </button>
+
+      {/* Bottom row: quantity controls, right-aligned */}
+      <div className="flex items-center gap-2 justify-end">
         <button
-          onClick={onShowInfo}
-          className="flex-1 min-w-0 text-left"
+          onClick={onRemoveStock}
+          disabled={displayQuantity === 0}
+          className="w-10 h-10 rounded-full bg-secondary hover:bg-secondary/80 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center transition-all"
         >
-          <h3 className="font-medium text-base truncate">{item.name}</h3>
-          <p className="text-xs text-muted-foreground truncate">
-            {category?.name || 'Uncategorized'}
-          </p>
+          <Minus className="w-4 h-4" />
         </button>
 
-        {/* Quantity controls */}
-        <div className="flex items-center gap-2 flex-shrink-0">
-          <button
-            onClick={onRemoveStock}
-            disabled={displayQuantity === 0}
-            className="w-10 h-10 rounded-full bg-secondary hover:bg-secondary/80 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center transition-all"
-          >
-            <Minus className="w-4 h-4" />
-          </button>
-
-          <div className={cn(
-            "min-w-12 text-center",
-            isOutOfStock && "text-destructive"
-          )}>
-            <span className="font-semibold text-lg">{displayQuantity}</span>
-            {selectedFilter === null && item.quantity !== displayQuantity && (
-              <span className="text-xs text-muted-foreground">/{item.quantity}</span>
-            )}
-          </div>
-
-          <button
-            onClick={onAddStock}
-            className="w-10 h-10 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 active:scale-95 flex items-center justify-center transition-all"
-          >
-            <Plus className="w-4 h-4" />
-          </button>
+        <div className={cn(
+          "min-w-12 text-center",
+          isOutOfStock && "text-destructive"
+        )}>
+          <span className="font-semibold text-lg">{displayQuantity}</span>
+          {selectedFilter === null && item.quantity !== displayQuantity && (
+            <span className="text-xs text-muted-foreground">/{item.quantity}</span>
+          )}
         </div>
 
-        {/* Edit/Delete */}
-        <div className="flex items-center gap-1 flex-shrink-0 border-l border-border/30 pl-3">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={onEdit}
-            className="h-10 w-10 text-muted-foreground hover:text-foreground"
-          >
-            <Pencil className="w-4 h-4" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={onDelete}
-            className="h-10 w-10 text-muted-foreground hover:text-destructive"
-          >
-            <Trash2 className="w-4 h-4" />
-          </Button>
-        </div>
+        <button
+          onClick={onAddStock}
+          className="w-10 h-10 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 active:scale-95 flex items-center justify-center transition-all"
+        >
+          <Plus className="w-4 h-4" />
+        </button>
       </div>
     </div>
   );

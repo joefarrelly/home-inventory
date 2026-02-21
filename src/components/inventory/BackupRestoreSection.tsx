@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import { Download, Upload } from 'lucide-react';
-import { exportBackup, importBackup } from '@/lib/backup';
+import { importBackup } from '@/lib/backup';
 import { Button } from '@/components/ui/button';
 import {
   AlertDialog,
@@ -19,21 +19,8 @@ export function BackupRestoreSection() {
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleExport = async () => {
-    try {
-      const data = await exportBackup();
-      const json = JSON.stringify(data, null, 2);
-      const blob = new Blob([json], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const date = new Date().toISOString().split('T')[0];
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `home-inventory-backup-${date}.json`;
-      a.click();
-      URL.revokeObjectURL(url);
-    } catch {
-      setError('Failed to export backup');
-    }
+  const handleExport = () => {
+    window.open('/api/export-backup', '_blank');
   };
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
