@@ -203,6 +203,21 @@ app.post('/api/settings', (req, res) => {
   res.json({ success: true });
 });
 
+// Serve APK download
+app.get('/download/app.apk', (req, res) => {
+  const apkPath = join(DATA_DIR, 'app.apk');
+  if (existsSync(apkPath)) {
+    res.download(apkPath, 'HomeInventory.apk');
+  } else {
+    res.status(404).json({ error: 'APK not available' });
+  }
+});
+
+app.get('/api/apk-available', (req, res) => {
+  const apkPath = join(DATA_DIR, 'app.apk');
+  res.json({ available: existsSync(apkPath) });
+});
+
 // Serve static files from the built React app
 const distPath = join(__dirname, '..', 'dist');
 console.log(`Dist path: ${distPath}`);

@@ -9,8 +9,6 @@ import History from "./pages/History";
 import Prices from "./pages/Prices";
 import Chores from "./pages/Chores";
 import NotFound from "./pages/NotFound";
-import { InstallPrompt } from "./components/InstallPrompt";
-
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -27,7 +25,6 @@ const App = () => (
           <Route path="/chores" element={<Chores />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
-        <InstallPrompt />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

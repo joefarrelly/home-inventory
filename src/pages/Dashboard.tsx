@@ -1,6 +1,6 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Package, ClipboardCheck, Search, Plus, Minus, AlertTriangle, Clock, CheckCircle2 } from 'lucide-react';
+import { Package, ClipboardCheck, Search, Plus, Minus, AlertTriangle, Clock, CheckCircle2, Download } from 'lucide-react';
 import { useInventory } from '@/hooks/useInventory';
 import { useSettings } from '@/hooks/useSettings';
 import { usePurchaseHistory } from '@/hooks/usePurchaseHistory';
@@ -36,6 +36,14 @@ const Dashboard = () => {
   const [removeStockItem, setRemoveStockItem] = useState<InventoryItem | null>(null);
   const [confirmingDoneChore, setConfirmingDoneChore] = useState<Chore | null>(null);
   const [doneNotes, setDoneNotes] = useState('');
+  const [apkAvailable, setApkAvailable] = useState(false);
+
+  useEffect(() => {
+    fetch('/api/apk-available')
+      .then(r => r.json())
+      .then(d => setApkAvailable(d.available))
+      .catch(() => {});
+  }, []);
 
   // Overdue chores
   const overdueChores = useMemo(
@@ -147,7 +155,16 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-background p-4 md:p-6 lg:p-8">
       <div className="max-w-6xl mx-auto space-y-6">
-        <h1 className="text-xl md:text-2xl font-bold tracking-tight">Home Inventory</h1>
+        <div className="flex items-center justify-between">
+          <h1 className="text-xl md:text-2xl font-bold tracking-tight">Home Inventory</h1>
+          {apkAvailable && (
+            <a href="/download/app.apk" download>
+              <Button variant="outline" size="icon" className="h-9 w-9">
+                <Download className="w-4 h-4" />
+              </Button>
+            </a>
+          )}
+        </div>
 
         {/* Nav Cards */}
         <div className="grid grid-cols-2 gap-3">
