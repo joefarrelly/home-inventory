@@ -58,13 +58,13 @@ export function InventoryItemCard({
           <button
             onClick={onRemoveStock}
             disabled={displayQuantity === 0}
-            className="w-8 h-8 rounded-full bg-secondary hover:bg-secondary/80 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center transition-colors"
+            className="w-10 h-10 rounded-full bg-secondary hover:bg-secondary/80 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center transition-all"
           >
             <Minus className="w-4 h-4" />
           </button>
 
           <div className={cn(
-            "min-w-[3rem] text-center",
+            "min-w-12 text-center",
             isOutOfStock && "text-destructive"
           )}>
             <span className="font-semibold text-lg">{displayQuantity}</span>
@@ -75,19 +75,19 @@ export function InventoryItemCard({
 
           <button
             onClick={onAddStock}
-            className="w-8 h-8 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 flex items-center justify-center transition-colors"
+            className="w-10 h-10 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 active:scale-95 flex items-center justify-center transition-all"
           >
             <Plus className="w-4 h-4" />
           </button>
         </div>
 
         {/* Edit/Delete */}
-        <div className="flex items-center gap-1 flex-shrink-0 border-l pl-2 ml-1">
+        <div className="flex items-center gap-1 flex-shrink-0 border-l border-border/30 pl-3">
           <Button
             variant="ghost"
             size="icon"
             onClick={onEdit}
-            className="h-8 w-8 text-muted-foreground hover:text-foreground"
+            className="h-10 w-10 text-muted-foreground hover:text-foreground"
           >
             <Pencil className="w-4 h-4" />
           </Button>
@@ -95,7 +95,7 @@ export function InventoryItemCard({
             variant="ghost"
             size="icon"
             onClick={onDelete}
-            className="h-8 w-8 text-muted-foreground hover:text-destructive"
+            className="h-10 w-10 text-muted-foreground hover:text-destructive"
           >
             <Trash2 className="w-4 h-4" />
           </Button>

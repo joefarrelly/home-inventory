@@ -159,7 +159,7 @@ const Prices = () => {
           <button
             onClick={() => setSelectedShop(null)}
             className={cn(
-              "px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors",
+              "px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all active:scale-95",
               selectedShop === null
                 ? "bg-primary text-primary-foreground"
                 : "bg-secondary hover:bg-secondary/80"
@@ -172,7 +172,7 @@ const Prices = () => {
               key={shop.id}
               onClick={() => setSelectedShop(shop.id)}
               className={cn(
-                "px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors",
+                "px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all active:scale-95",
                 selectedShop === shop.id
                   ? "bg-primary text-primary-foreground"
                   : "bg-secondary hover:bg-secondary/80"

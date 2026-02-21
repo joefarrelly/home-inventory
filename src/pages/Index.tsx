@@ -1,6 +1,12 @@
 import { useState, useMemo, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { Plus, Package, Search, Settings, History, PoundSterling, MapPin, Tag, PackageOpen, Download, ClipboardCheck, ArrowLeft } from 'lucide-react';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from '@/components/ui/sheet';
 import { useInventory } from '@/hooks/useInventory';
 import { useSettings } from '@/hooks/useSettings';
 import { usePurchaseHistory } from '@/hooks/usePurchaseHistory';
@@ -54,6 +60,9 @@ const Index = () => {
 
   // Info dialog state
   const [infoItem, setInfoItem] = useState<InventoryItem | null>(null);
+
+  // Menu sheet state
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // URL params for deep linking (NFC tags, etc.)
   const [searchParams, setSearchParams] = useSearchParams();
@@ -266,50 +275,77 @@ const Index = () => {
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <Link to="/">
-              <Button variant="ghost" size="icon">
+              <Button variant="ghost" size="icon" className="h-10 w-10">
                 <ArrowLeft className="w-5 h-5" />
               </Button>
             </Link>
             <h1 className="text-xl md:text-2xl font-bold tracking-tight">Inventory</h1>
           </div>
-          <div className="flex gap-2">
-            <Link to="/chores">
-              <Button variant="ghost" size="icon">
-                <ClipboardCheck className="w-5 h-5" />
-              </Button>
-            </Link>
-            <Link to="/prices">
-              <Button variant="ghost" size="icon">
-                <PoundSterling className="w-5 h-5" />
-              </Button>
-            </Link>
-            <Link to="/history">
-              <Button variant="ghost" size="icon">
-                <History className="w-5 h-5" />
-              </Button>
-            </Link>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={handleExportCsv}
-            >
-              <Download className="w-5 h-5" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsSettingsOpen(true)}
-            >
-              <Settings className="w-5 h-5" />
-            </Button>
-            <Button
-              onClick={() => setIsFormOpen(true)}
-              size="icon"
-            >
-              <Plus className="w-5 h-5" />
-            </Button>
-          </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-10 w-10"
+            onClick={() => setIsMenuOpen(true)}
+          >
+            <Settings className="w-5 h-5" />
+          </Button>
         </div>
+
+        {/* Menu Sheet */}
+        <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+          <SheetContent side="bottom" className="rounded-t-xl">
+            <SheetHeader>
+              <SheetTitle>Menu</SheetTitle>
+            </SheetHeader>
+            <nav className="space-y-1 py-4">
+              <button
+                onClick={() => { setIsMenuOpen(false); setIsFormOpen(true); }}
+                className="flex items-center gap-3 w-full p-3 rounded-lg text-left hover:bg-secondary/50 active:bg-secondary/80 transition-colors"
+              >
+                <Plus className="w-5 h-5 text-primary" />
+                <span className="font-medium">Add New Item</span>
+              </button>
+              <Link
+                to="/chores"
+                onClick={() => setIsMenuOpen(false)}
+                className="flex items-center gap-3 w-full p-3 rounded-lg hover:bg-secondary/50 active:bg-secondary/80 transition-colors"
+              >
+                <ClipboardCheck className="w-5 h-5 text-muted-foreground" />
+                <span className="font-medium">Chores</span>
+              </Link>
+              <Link
+                to="/prices"
+                onClick={() => setIsMenuOpen(false)}
+                className="flex items-center gap-3 w-full p-3 rounded-lg hover:bg-secondary/50 active:bg-secondary/80 transition-colors"
+              >
+                <PoundSterling className="w-5 h-5 text-muted-foreground" />
+                <span className="font-medium">Price Comparison</span>
+              </Link>
+              <Link
+                to="/history"
+                onClick={() => setIsMenuOpen(false)}
+                className="flex items-center gap-3 w-full p-3 rounded-lg hover:bg-secondary/50 active:bg-secondary/80 transition-colors"
+              >
+                <History className="w-5 h-5 text-muted-foreground" />
+                <span className="font-medium">Purchase History</span>
+              </Link>
+              <button
+                onClick={() => { setIsMenuOpen(false); handleExportCsv(); }}
+                className="flex items-center gap-3 w-full p-3 rounded-lg text-left hover:bg-secondary/50 active:bg-secondary/80 transition-colors"
+              >
+                <Download className="w-5 h-5 text-muted-foreground" />
+                <span className="font-medium">Export CSV</span>
+              </button>
+              <button
+                onClick={() => { setIsMenuOpen(false); setIsSettingsOpen(true); }}
+                className="flex items-center gap-3 w-full p-3 rounded-lg text-left hover:bg-secondary/50 active:bg-secondary/80 transition-colors"
+              >
+                <Settings className="w-5 h-5 text-muted-foreground" />
+                <span className="font-medium">Settings</span>
+              </button>
+            </nav>
+          </SheetContent>
+        </Sheet>
 
         {/* Search */}
         <div className="relative">
@@ -367,7 +403,7 @@ const Index = () => {
             <button
               onClick={() => setSelectedFilter(null)}
               className={cn(
-                "px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors",
+                "px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all active:scale-95",
                 selectedFilter === null
                   ? "bg-primary text-primary-foreground"
                   : "bg-secondary hover:bg-secondary/80"
@@ -385,7 +421,7 @@ const Index = () => {
                     key={cat.id}
                     onClick={() => setSelectedFilter(cat.id)}
                     className={cn(
-                      "px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors",
+                      "px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all active:scale-95",
                       selectedFilter === cat.id
                         ? "bg-primary text-primary-foreground"
                         : "bg-secondary hover:bg-secondary/80"
@@ -407,7 +443,7 @@ const Index = () => {
                       key={location.id}
                       onClick={() => setSelectedFilter(location.id)}
                       className={cn(
-                        "px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors",
+                        "px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all active:scale-95",
                         selectedFilter === location.id
                           ? "bg-primary text-primary-foreground"
                           : "bg-secondary hover:bg-secondary/80"
@@ -421,7 +457,7 @@ const Index = () => {
                   <button
                     onClick={() => setSelectedFilter('unassigned')}
                     className={cn(
-                      "px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors",
+                      "px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all active:scale-95",
                       selectedFilter === 'unassigned'
                         ? "bg-primary text-primary-foreground"
                         : "bg-secondary hover:bg-secondary/80"
@@ -437,7 +473,7 @@ const Index = () => {
                 <button
                   onClick={() => setSelectedFilter('out')}
                   className={cn(
-                    "px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors",
+                    "px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all active:scale-95",
                     selectedFilter === 'out'
                       ? "bg-primary text-primary-foreground"
                       : "bg-secondary hover:bg-secondary/80"
@@ -448,7 +484,7 @@ const Index = () => {
                 <button
                   onClick={() => setSelectedFilter('low')}
                   className={cn(
-                    "px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors",
+                    "px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all active:scale-95",
                     selectedFilter === 'low'
                       ? "bg-primary text-primary-foreground"
                       : "bg-secondary hover:bg-secondary/80"

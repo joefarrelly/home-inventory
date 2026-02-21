@@ -57,7 +57,7 @@ export function ChoreCard({
     >
       <div className="flex items-center gap-3">
         {/* Status indicator */}
-        <div className={cn("w-2.5 h-2.5 rounded-full flex-shrink-0", getStatusColor())} />
+        <div className={cn("w-3 h-3 rounded-full flex-shrink-0", getStatusColor())} />
 
         {/* Chore info - tappable area */}
         <button
@@ -73,18 +73,18 @@ export function ChoreCard({
         {/* Done button */}
         <button
           onClick={(e) => { e.stopPropagation(); onMarkDone(); }}
-          className="w-9 h-9 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 flex items-center justify-center transition-colors flex-shrink-0"
+          className="w-10 h-10 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 active:scale-95 flex items-center justify-center transition-all flex-shrink-0"
         >
           <Check className="w-5 h-5" />
         </button>
 
         {/* Edit/Delete */}
-        <div className="flex items-center gap-1 flex-shrink-0 border-l pl-2 ml-1">
+        <div className="flex items-center gap-1 flex-shrink-0 border-l border-border/30 pl-3">
           <Button
             variant="ghost"
             size="icon"
             onClick={onEdit}
-            className="h-8 w-8 text-muted-foreground hover:text-foreground"
+            className="h-10 w-10 text-muted-foreground hover:text-foreground"
           >
             <Pencil className="w-4 h-4" />
           </Button>
@@ -92,7 +92,7 @@ export function ChoreCard({
             variant="ghost"
             size="icon"
             onClick={onDelete}
-            className="h-8 w-8 text-muted-foreground hover:text-destructive"
+            className="h-10 w-10 text-muted-foreground hover:text-destructive"
           >
             <Trash2 className="w-4 h-4" />
           </Button>

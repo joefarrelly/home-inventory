@@ -181,7 +181,7 @@ const Chores = () => {
               <button
                 onClick={() => setSelectedFilter(null)}
                 className={cn(
-                  "px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors",
+                  "px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all active:scale-95",
                   selectedFilter === null
                     ? "bg-primary text-primary-foreground"
                     : "bg-secondary hover:bg-secondary/80"
@@ -192,7 +192,7 @@ const Chores = () => {
               <button
                 onClick={() => setSelectedFilter('overdue')}
                 className={cn(
-                  "px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors",
+                  "px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all active:scale-95",
                   selectedFilter === 'overdue'
                     ? "bg-primary text-primary-foreground"
                     : "bg-secondary hover:bg-secondary/80"
@@ -203,7 +203,7 @@ const Chores = () => {
               <button
                 onClick={() => setSelectedFilter('due-soon')}
                 className={cn(
-                  "px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors",
+                  "px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all active:scale-95",
                   selectedFilter === 'due-soon'
                     ? "bg-primary text-primary-foreground"
                     : "bg-secondary hover:bg-secondary/80"
