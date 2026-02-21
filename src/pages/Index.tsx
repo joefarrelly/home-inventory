@@ -119,7 +119,7 @@ const Index = () => {
 
   // Stock tab counts
   const outOfStockCount = useMemo(() => items.filter(i => i.quantity === 0).length, [items]);
-  const lowStockCount = useMemo(() => items.filter(i => i.minQuantity != null && i.quantity > 0 && i.quantity <= i.minQuantity).length, [items]);
+  const lowStockCount = useMemo(() => items.filter(i => i.quantity === 1).length, [items]);
 
   // Filter items by category/location/stock and search
   const filteredItems = useMemo(() => {
@@ -139,7 +139,7 @@ const Index = () => {
           if (selectedFilter === 'out') {
             if (item.quantity !== 0) return false;
           } else if (selectedFilter === 'low') {
-            if (!(item.minQuantity != null && item.quantity > 0 && item.quantity <= item.minQuantity)) return false;
+            if (item.quantity !== 1) return false;
           }
         } else {
           // Category mode

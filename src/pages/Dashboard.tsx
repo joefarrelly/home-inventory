@@ -69,7 +69,7 @@ const Dashboard = () => {
   // Stock alerts
   const outOfStockItems = useMemo(() => items.filter(i => i.quantity === 0), [items]);
   const lowStockItems = useMemo(
-    () => items.filter(i => i.minQuantity != null && i.quantity > 0 && i.quantity <= i.minQuantity),
+    () => items.filter(i => i.quantity === 1),
     [items]
   );
 

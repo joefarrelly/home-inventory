@@ -28,7 +28,7 @@ export function InventoryItemCard({
   const category = categories.find(c => c.id === item.category);
   const unitType = unitTypes.find(u => u.id === item.unit);
   const isOutOfStock = item.quantity === 0;
-  const isLowStock = !isOutOfStock && item.minQuantity != null && item.quantity <= item.minQuantity;
+  const isLowStock = item.quantity === 1;
 
   const unitLabel = displayQuantity === 1
     ? (unitType?.singular || 'Item')
