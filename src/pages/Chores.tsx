@@ -138,12 +138,7 @@ const Chores = () => {
             </Link>
             <h1 className="text-xl md:text-2xl font-bold tracking-tight">Chores</h1>
           </div>
-          <Button
-            onClick={() => setIsFormOpen(true)}
-            size="icon"
-          >
-            <Plus className="w-5 h-5" />
-          </Button>
+          <div className="w-10" /> {/* Spacer to balance header */}
         </div>
 
         {/* View Mode Toggle */}
@@ -238,8 +233,6 @@ const Chores = () => {
                     chore={chore}
                     completions={completions}
                     onShowInfo={() => setInfoChore(chore)}
-                    onEdit={() => openEditDialog(chore)}
-                    onDelete={() => setDeletingChore(chore)}
                     onMarkDone={() => handleMarkDone(chore)}
                   />
                 ))
@@ -300,7 +293,28 @@ const Chores = () => {
           chore={infoChore}
           completions={completions}
           onDeleteCompletion={deleteCompletion}
+          onEdit={() => {
+            if (infoChore) {
+              openEditDialog(infoChore);
+              setInfoChore(null);
+            }
+          }}
+          onDelete={() => {
+            if (infoChore) {
+              setDeletingChore(infoChore);
+              setInfoChore(null);
+            }
+          }}
         />
+
+        {/* Floating Add Button */}
+        <button
+          onClick={() => setIsFormOpen(true)}
+          className="fixed bottom-6 right-6 h-12 px-4 rounded-full bg-primary text-primary-foreground shadow-lg hover:bg-primary/90 active:scale-95 flex items-center gap-2 transition-all z-50"
+        >
+          <Plus className="w-5 h-5" />
+          <span className="font-medium text-sm">New Chore</span>
+        </button>
       </div>
     </div>
   );

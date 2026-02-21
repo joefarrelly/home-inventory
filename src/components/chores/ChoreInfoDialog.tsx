@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { Trash2 } from 'lucide-react';
+import { Trash2, Pencil } from 'lucide-react';
 import { Chore, ChoreCompletion, getDaysSinceLastDone, isOverdue, isDueSoon } from '@/types/chore';
 import {
   Dialog,
@@ -16,6 +16,8 @@ interface ChoreInfoDialogProps {
   chore: Chore | null;
   completions: ChoreCompletion[];
   onDeleteCompletion: (id: string) => void;
+  onEdit?: () => void;
+  onDelete?: () => void;
 }
 
 export function ChoreInfoDialog({
@@ -24,6 +26,8 @@ export function ChoreInfoDialog({
   chore,
   completions,
   onDeleteCompletion,
+  onEdit,
+  onDelete,
 }: ChoreInfoDialogProps) {
   if (!chore) return null;
 
@@ -114,6 +118,24 @@ export function ChoreInfoDialog({
               </div>
             )}
           </div>
+
+          {/* Edit / Delete */}
+          {(onEdit || onDelete) && (
+            <div className="flex gap-2 pt-2 border-t">
+              {onEdit && (
+                <Button variant="outline" className="flex-1" onClick={onEdit}>
+                  <Pencil className="w-4 h-4 mr-2" />
+                  Edit
+                </Button>
+              )}
+              {onDelete && (
+                <Button variant="outline" className="flex-1 text-destructive hover:text-destructive" onClick={onDelete}>
+                  <Trash2 className="w-4 h-4 mr-2" />
+                  Delete
+                </Button>
+              )}
+            </div>
+          )}
         </div>
       </DialogContent>
     </Dialog>

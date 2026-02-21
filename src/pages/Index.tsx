@@ -598,6 +598,15 @@ const Index = () => {
             }
           }}
         />
+
+        {/* Floating Add Button */}
+        <button
+          onClick={() => setIsFormOpen(true)}
+          className="fixed bottom-6 right-6 h-12 px-4 rounded-full bg-primary text-primary-foreground shadow-lg hover:bg-primary/90 active:scale-95 flex items-center gap-2 transition-all z-50"
+        >
+          <Plus className="w-5 h-5" />
+          <span className="font-medium text-sm">New Item</span>
+        </button>
       </div>
     </div>
   );
